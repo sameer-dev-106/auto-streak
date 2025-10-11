@@ -1,0 +1,23 @@
+name: Auto Daily Streak
+permissions:
+  contents: write
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at 00:00 UTC (5:30 AM IST)
+  workflow_dispatch:
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create/update streak file
+        run: |
+          echo "Last updated: $(date -u)" >> streak-log.txt
+          git config user.name "Sameer"
+          git config user.email "sk6586418@gmail.com"
+          git add streak-log.txt
+          git commit -m "Auto daily commit: $(date -u)" || echo "No changes to commit"
+          git push
